@@ -22,9 +22,8 @@ def genDNA(length):
   
   return result
 
-# directory with metadata json files without image
-directory = 'nftJsonDir'
-
+# number of NFTS. All loops will run this number of times
+loopRange = 782
 # counter for metadata creation
 count = 0
 
@@ -39,7 +38,7 @@ imagesList = []
 
 # setup image array in proper order
 # create array of images so its easier to sort. This is necessary, else python will sort the name array in the following order: 1, 10, 100, 1000, 110, etc 
-for i in range(0, 782):
+for i in range(0, loopRange):
 
     # file name
     imgFile = imageDir+str(i+1)+'.json' 
@@ -65,53 +64,47 @@ sortedImages = sorted(imagesList, key = lambda i: i['id'])
 # counter for image names
 nameCount = 1
 
-for filename in os.listdir(directory):
+for i in range(0, loopRange):
 
-    # get original JSON directory
-    f = os.path.join(directory, filename)
+    # set asset name
+    assetName = 'DOOM # ' + str(nameCount)
 
-    # checking if it is a file, run if so, else stop
-    if os.path.isfile(f):
-
-        # set asset name
-        assetName = 'DOOM # ' + str(nameCount)
-
-        temp = {
-            "name": assetName,
-            "dna": genDNA(32),
-            "edition": 1,
-            "date": 'Generated on ' + str(date.today()),
-            "description": "1000 randomly generated artworks, comprised of real paint and digital objects. Created with p5.js.",
-            "image": sortedImages[count]['image'],
-            "attributes": [
-                {
-                "trait_type": "background",
-                "value": "#ffe1b8"
-                },
-                {
-                "trait_type": "color palette",
-                "value": [
-                    "#ffa28f",
-                    "#ffcd9e",
-                    "#ffe1b8",
-                    "#bbff9e"
-                ]
-                },
-                {
-                "trait_type": "size",
-                "value": "3000px by 3000px"
-                },
-                {
-                "trait_type": "1/1?",
-                "value": "No"
-                }
+    temp = {
+        "name": assetName,
+        "dna": genDNA(32),
+        "edition": 1,
+        "date": 'Generated on ' + str(date.today()),
+        "description": "1000 randomly generated artworks, comprised of real paint and digital objects. Created with p5.js.",
+        "image": sortedImages[count]['image'],
+        "attributes": [
+            {
+            "trait_type": "background",
+            "value": "#ffe1b8"
+            },
+            {
+            "trait_type": "color palette",
+            "value": [
+                "#ffa28f",
+                "#ffcd9e",
+                "#ffe1b8",
+                "#bbff9e"
             ]
+            },
+            {
+            "trait_type": "size",
+            "value": "3000px by 3000px"
+            },
+            {
+            "trait_type": "1/1?",
+            "value": "No"
             }
-        #update counter
-        count += 1
+        ]
+        }
+    #update counter
+    count += 1
 
-        # insert metadata
-        metadata.append(temp)
+    # insert metadata
+    metadata.append(temp)
 
 # temp metadata filename counter
 fileNameCount = 1
@@ -123,7 +116,7 @@ for data in metadata:
     json_object = json.dumps(data, indent = 4)
 
     # set filename with its proper dir
-    fileName = "./newFactoriaJSON/" + str(fileNameCount)+".json"
+    fileName = "./final/" + str(fileNameCount)+".json"
     
     # Writing JSON file
     with open(fileName, "w") as outfile:
